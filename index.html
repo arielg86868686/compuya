@@ -616,3 +616,620 @@
     </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Compuya - Catálogo Dinámico de Combos</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carga de la fuente Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b0f19; /* Fondo oscuro premium */
+        }
+        
+        .product-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .product-card:hover, .product-card:focus-within {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(6, 182, 212, 0.15);
+            border-color: #06b6d4;
+            outline: none;
+        }
+
+        /* Estilos personalizados para el scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #06b6d4;
+        }
+
+        /* Animación del Toast */
+        @keyframes slideIn {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .animate-slide-in {
+            animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+    </style>
+</head>
+<body class="text-slate-100 min-h-screen py-6 px-4 md:px-8">
+    
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-cyan-600 text-white px-4 py-2 rounded-lg z-50">
+        Saltar al contenido principal
+    </a>
+
+    <!-- TOAST NOTIFICACIÓN CUSTOM -->
+    <div id="custom-toast" class="fixed bottom-5 right-5 bg-slate-800 border-l-4 border-red-500 text-slate-100 px-5 py-4 rounded-xl shadow-2xl hidden z-50 max-w-sm animate-slide-in">
+        <div class="flex items-center space-x-3">
+            <svg class="w-6 h-6 text-red-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+            <p id="toast-message" class="text-sm font-medium"></p>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto">
+        <!-- HERO SECTION -->
+        <header id="main-header" class="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-850 to-cyan-950 border border-slate-800 text-white p-6 md:p-10 rounded-3xl shadow-2xl mb-8 text-center transition-all duration-300">
+            <div class="absolute -right-16 -top-16 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl"></div>
+            <div class="absolute -left-16 -bottom-16 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl"></div>
+            
+            <img src="https://placehold.co/220x60/0f172a/06b6d4?text=Compuya" alt="Logo de Compuya" class="mx-auto h-14 mb-5 rounded-xl shadow-inner border border-slate-800" />
+            
+            <h1 class="text-3xl md:text-5xl font-black mb-4 tracking-tight bg-gradient-to-r from-white via-slate-200 to-cyan-400 bg-clip-text text-transparent">
+                Actualizá tu PC Hoy: Potencia y Velocidad Garantizada
+            </h1>
+            
+            <p class="text-base md:text-lg font-bold text-emerald-400 bg-emerald-400/10 inline-block px-5 py-2.5 rounded-full border border-emerald-400/30 backdrop-blur-sm">
+                💰 10% DE DESCUENTO Pago en Efectivo o Transferencia
+            </p>
+        </header>
+
+        <!-- CUERPO PRINCIPAL -->
+        <main id="main-content">
+            <!-- TITULO DEL CATÁLOGO -->
+            <h2 id="dynamic-title" class="text-2xl md:text-4xl font-extrabold text-center mb-10 text-cyan-400 tracking-tight flex items-center justify-center gap-2">
+                <span>🔥</span> Los Mejores Combos Calidad-Precio del Mercado <span>🔥</span>
+            </h2>
+
+            <!-- VISTA DE CATÁLOGO (Grid responsivo premium) -->
+            <div id="catalog-view" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+
+            <!-- VISTA DE DETALLE (Unificada en tema oscuro de alta gama) -->
+            <div id="detail-view" class="hidden bg-slate-900/80 backdrop-blur-md p-5 md:p-10 rounded-3xl shadow-2xl border border-slate-800 text-slate-100">
+                <button onclick="showCatalogView()" class="group flex items-center text-cyan-400 hover:text-cyan-300 font-bold mb-8 transition duration-150 text-base md:text-lg">
+                    <svg class="w-5 h-5 mr-2 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Volver a los Combos
+                </button>
+                <div id="product-detail-content" class="flex flex-col lg:flex-row lg:space-x-12">
+                    <!-- Contenido dinámico inyectado por JS -->
+                </div>
+            </div>
+        </main>
+
+        <!-- SECCIÓN DE BENEFICIOS -->
+        <section id="beneficios-section" class="my-12">
+            <h2 class="text-2xl md:text-3xl font-bold text-center text-cyan-400 mb-8 tracking-tight">¿Por qué elegir Compuya?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Entrega -->
+                <div class="bg-gradient-to-br from-slate-900 to-slate-950 p-6 rounded-2xl border border-slate-800/80 hover:border-cyan-500/40 transition-all duration-300 shadow-lg">
+                    <div class="p-3 bg-cyan-500/10 rounded-xl w-fit mb-4">
+                        <svg class="w-8 h-8 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-100 mb-2">Entrega a Domicilio</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">Entregamos en la puerta de tu casa y dejamos todo instalado <strong class="text-cyan-300">sin costo adicional</strong>.</p>
+                </div>
+                <!-- Pago Seguro -->
+                <div class="bg-gradient-to-br from-slate-900 to-slate-950 p-6 rounded-2xl border border-slate-800/80 hover:border-teal-500/40 transition-all duration-300 shadow-lg">
+                    <div class="p-3 bg-teal-500/10 rounded-xl w-fit mb-4">
+                        <svg class="w-8 h-8 text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-100 mb-2">Pago Seguro</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed">¡Pagás recién cuando recibís, revisás y aprobás tu computadora! Sin señas previas ni adelantos de riesgo.</p>
+                </div>
+                <!-- Opciones de Pago -->
+                <div class="bg-gradient-to-br from-slate-900 to-slate-950 p-6 rounded-2xl border border-slate-800/80 hover:border-yellow-500/40 transition-all duration-300 shadow-lg">
+                    <div class="p-3 bg-yellow-500/10 rounded-xl w-fit mb-4">
+                        <svg class="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-100 mb-2">Medios de Pago</h3>
+                    <ul class="text-slate-400 text-sm space-y-1.5">
+                        <li class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span><strong class="text-emerald-400">Efectivo:</strong> Al recibir el equipo</li>
+                        <li class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span><strong class="text-cyan-400">Transferencia:</strong> En el momento de la entrega</li>
+                        <li class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>No aceptamos tarjetas momentáneamente</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Garantía -->
+            <div class="mt-6 bg-gradient-to-br from-slate-900 to-slate-950 p-6 rounded-2xl border border-slate-800/80 shadow-lg">
+                <details class="group">
+                    <summary class="text-xl font-bold text-cyan-400 cursor-pointer hover:text-cyan-300 transition duration-200 list-none flex items-center justify-between">
+                        <span class="flex items-center gap-2">🛡️ Garantía Total (Expandible)</span>
+                        <span class="transition group-open:rotate-180">
+                            <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </span>
+                    </summary>
+                    <div class="mt-5 p-5 bg-slate-950/50 rounded-xl border border-slate-800/60 text-center">
+                        <button id="openWarrantyModal" class="w-full font-extrabold text-xl text-emerald-400 hover:text-emerald-300 flex items-center justify-center focus:outline-none transition duration-200 group-hover:scale-105" aria-label="Abrir modal de garantía">
+                            <svg class="w-6 h-6 mr-2 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Garantía de 3 Meses por Escrito
+                        </button>
+                        <p class="mt-3 text-sm text-slate-300">
+                            Todos nuestros equipos de outlet/usados premium pasan por un riguroso testeo de hardware e incluyen <strong class="text-yellow-400">garantía firmada de 3 meses</strong>.
+                        </p>
+                    </div>
+                </details>
+            </div>
+        </section>
+    </div>
+
+    <!-- MODAL DE GARANTÍA -->
+    <div id="warrantyModal" class="fixed inset-0 bg-black/90 backdrop-blur-md hidden items-center justify-center z-50 p-4 transition-all duration-300">
+        <div class="bg-slate-900 border border-slate-800 text-slate-100 p-6 md:p-8 rounded-3xl w-full max-w-lg relative shadow-2xl">
+            <button class="absolute top-4 right-4 text-slate-400 hover:text-white text-3xl focus:outline-none" onclick="closeWarrantyModal()">&times;</button>
+            <h3 class="text-2xl md:text-3xl font-extrabold text-emerald-400 mb-4 border-b border-slate-800 pb-3 flex items-center gap-2">
+                🛡️ Garantía Escrita
+            </h3>
+            <p class="mb-4 text-sm md:text-base text-slate-300 leading-relaxed">
+                Ofrecemos 3 meses de garantía por escrito en todas nuestras computadoras (CPU) por cualquier falla de hardware no ocasionada por el usuario.
+            </p>
+            <ul class="list-disc list-inside space-y-3 text-sm text-slate-400 mb-6">
+                <li><strong class="text-slate-200">Cobertura total:</strong> Placa madre, procesador, memoria RAM, fuentes y discos (HDD/SSD).</li>
+                <li><strong class="text-slate-200">Exclusiones:</strong> Fallas derivadas de virus/software ajeno, manipulación de fajas de seguridad o daños físicos.</li>
+                <li><strong class="text-slate-200">Soporte Express:</strong> Si surge algún inconveniente, coordinamos un retiro o cambio inmediato del componente.</li>
+            </ul>
+            <button class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-3.5 rounded-xl transition duration-200" onclick="closeWarrantyModal()">Entendido</button>
+        </div>
+    </div>
+
+    <!-- MODAL DE COMPRA / CHECKOUT -->
+    <div id="purchaseModal" class="fixed inset-0 bg-black/90 backdrop-blur-md hidden items-center justify-center z-50 p-4 transition-all duration-300">
+        <div class="bg-slate-900 border border-slate-800 text-slate-100 p-6 md:p-8 rounded-3xl w-full max-w-xl relative shadow-2xl max-h-[90vh] overflow-y-auto">
+            <button class="absolute top-4 right-4 text-slate-400 hover:text-white text-3xl focus:outline-none" onclick="closePurchaseModal()">&times;</button>
+            <h3 class="text-2xl md:text-3xl font-extrabold text-cyan-400 mb-3 border-b border-slate-800 pb-3 flex items-center gap-2">
+                📦 Datos de Entrega
+            </h3>
+            <p class="mb-5 text-sm text-slate-400">Completá tus datos para coordinar el despacho e instalación gratuita:</p>
+            
+            <form id="purchaseForm" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="nombre" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Nombre Completo *</label>
+                        <input type="text" id="nombre" name="nombre" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:border-cyan-500 transition">
+                    </div>
+                    <div>
+                        <label for="dni" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">DNI *</label>
+                        <input type="text" id="dni" name="dni" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:border-cyan-500 transition">
+                    </div>
+                </div>
+                <div>
+                    <label for="direccion" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Dirección Completa (Calle, Altura, Piso) *</label>
+                    <input type="text" id="direccion" name="direccion" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:border-cyan-500 transition">
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="codigo_postal" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Código Postal *</label>
+                        <input type="text" id="codigo_postal" name="codigo_postal" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:border-cyan-500 transition">
+                    </div>
+                    <div>
+                        <label for="telefono" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Teléfono Móvil (WhatsApp) *</label>
+                        <input type="tel" id="telefono" name="telefono" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:border-cyan-500 transition">
+                    </div>
+                </div>
+                <div>
+                    <label for="email" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Email *</label>
+                    <input type="email" id="email" name="email" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:border-cyan-500 transition">
+                </div>
+                
+                <button type="button" id="payButton" class="w-full bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-slate-950 font-black py-4 rounded-xl transition duration-200 flex items-center justify-center gap-2 mt-6">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-1.1 5H19M7 13l-1.1 5M7 13l1.1-5"></path>
+                    </svg>
+                    Confirmar por WhatsApp
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const mainHeader = document.getElementById('main-header');
+        const keyInfoSection = document.getElementById('beneficios-section');
+        const catalogView = document.getElementById('catalog-view');
+        const detailView = document.getElementById('detail-view');
+        const productDetailContent = document.getElementById('product-detail-content');
+        const dynamicTitle = document.getElementById('dynamic-title');
+        const warrantyModal = document.getElementById('warrantyModal');
+        const purchaseModal = document.getElementById('purchaseModal');
+        const openWarrantyModalBtn = document.getElementById('openWarrantyModal');
+        const customToast = document.getElementById('custom-toast');
+        const toastMessage = document.getElementById('toast-message');
+
+        const WHATSAPP_NUMBER = "5491159980227";
+        const CORE2DUO_IDS = [1, 2];
+        const UPGRADE_COSTS = {
+            SSD_128: 72000,
+            SSD_256: 125000
+        };
+
+        let currentProduct = null;
+        let currentQuantity = 1;
+
+        // Productos actualizados: Monitor de 19" estándar en todos los modelos
+        const products = [
+            { id: 1, title: "Combo 001 Entrada", basePrice: 230000, imageUrl: "https://raw.githubusercontent.com/arielg86/compuya/main/1.png", description: "Puesto de trabajo ideal para Call Center. Económico y confiable para atención telefónica, sistemas de gestión y navegación web.", specs: [ { name: "Procesador", value: "Intel Core2Duo" }, { name: "Memoria RAM", value: "4 GB" }, { name: "Disco", value: "500 GB HDD" }, { name: "Monitor", value: '19" LCD' }, { name: "Accesorios", value: "Teclado y mouse" }, { name: "Software", value: "Win 10, Office completo y Antivirus" }, { name: "Garantia", value: "3 Meses" } ] },
+            { id: 2, title: "Combo 003 Oficina", basePrice: 265000, imageUrl: "https://raw.githubusercontent.com/arielg86/compuya/main/2.png", description: "Puesto de trabajo para Facturación. Con 8GB de RAM maneja sistemas de facturación, planillas y varias pestañas abiertas sin trabarse.", specs: [ { name: "Procesador", value: "Intel Core2Duo" }, { name: "Memoria RAM", value: "8 GB" }, { name: "Disco", value: "500 GB HDD" }, { name: "Monitor", value: '19" LCD' }, { name: "Accesorios", value: "Teclado y mouse" }, { name: "Software", value: "Win 10, Office completo y Antivirus" }, { name: "Garantia", value: "3 Meses" } ] },
+            { id: 3, title: "Combo 019 Básica i3", basePrice: 295000, imageUrl: "https://raw.githubusercontent.com/arielg86/compuya/main/3.png", description: "Ideal para la casa y el teletrabajo: internet, videollamadas, Word y Excel con la potencia de un Intel i3.", specs: [ { name: "Procesador", value: "Intel i3" }, { name: "Memoria RAM", value: "8 GB" }, { name: "Disco", value: "500 GB HDD" }, { name: "Monitor", value: '19" LCD' }, { name: "Accesorios", value: "Teclado y mouse" }, { name: "Software", value: "Win 10, Office completo y Antivirus" }, { name: "Garantia", value: "3 Meses" } ] },
+            { id: 5, title: "Combo 022 Eco Gaming i3", basePrice: 380000, imageUrl: "https://raw.githubusercontent.com/arielg86/compuya/main/5.png", description: "Eco Gaming: ideal para juegos básicos. El disco SSD le da arranque y carga ultra-rápidos.", specs: [ { name: "Procesador", value: "Intel i3" }, { name: "Memoria RAM", value: "8 GB" }, { name: "Disco", value: "500 GB HDD + 128 GB SSD" }, { name: "Monitor", value: '19" LCD' }, { name: "Accesorios", value: "Teclado y mouse" }, { name: "Software", value: "Win 11, Office completo y Antivirus" }, { name: "Garantia", value: "3 Meses" } ] },
+            { id: 6, title: "Combo 033 Gaming i5", basePrice: 430000, imageUrl: "https://raw.githubusercontent.com/arielg86/compuya/main/6.png", description: "Gaming para juegos estilo Roblox y Minecraft. Procesador Intel i5 con SSD para jugar y cargar todo más rápido.", specs: [ { name: "Procesador", value: "Intel i5" }, { name: "Memoria RAM", value: "8 GB" }, { name: "Disco", value: "500 GB HDD + 128 GB SSD" }, { name: "Monitor", value: '19" LCD' }, { name: "Accesorios", value: "Teclado y mouse" }, { name: "Software", value: "Win 11, Office completo y Antivirus" }, { name: "Garantia", value: "3 Meses" } ] },
+            { id: 7, title: "Combo 031 PRO Gaming", basePrice: 475000, imageUrl: "https://raw.githubusercontent.com/arielg86/compuya/main/7.png", description: "Gaming para juegos más nuevos en la nube, como GTA V y Counter Strike. Intel i5, 16GB de RAM y SSD: el más completo del catálogo.", specs: [ { name: "Procesador", value: "Intel i5" }, { name: "Memoria RAM", value: "16 GB (Máxima multitarea)" }, { name: "Disco", value: "500 GB HDD + 128 GB SSD" }, { name: "Monitor", value: '19" LCD' }, { name: "Accesorios", value: "Teclado y mouse" }, { name: "Software", value: "Win 11, Office completo y Antivirus" }, { name: "Garantia", value: "3 Meses" } ] }
+        ];
+
+        function showToast(message) {
+            toastMessage.textContent = message;
+            customToast.classList.remove('hidden');
+            setTimeout(() => customToast.classList.add('hidden'), 4000);
+        }
+
+        function formatPrice(number) {
+            if (typeof number !== 'number' || isNaN(number)) return "0";
+            return number.toLocaleString('es-AR').replace(/,/g, '.');
+        }
+
+        function openWarrantyModal() {
+            warrantyModal.classList.add('flex');
+            warrantyModal.classList.remove('hidden');
+        }
+
+        function closeWarrantyModal() {
+            warrantyModal.classList.add('hidden');
+            warrantyModal.classList.remove('flex');
+        }
+
+        function openPurchaseModal(product) {
+            currentProduct = product;
+            purchaseModal.classList.add('flex');
+            purchaseModal.classList.remove('hidden');
+
+            document.getElementById('payButton').onclick = () => {
+                const nombre = document.getElementById('nombre').value.trim();
+                const dni = document.getElementById('dni').value.trim();
+                const direccion = document.getElementById('direccion').value.trim();
+                const cp = document.getElementById('codigo_postal').value.trim();
+                const email = document.getElementById('email').value.trim();
+                const telefono = document.getElementById('telefono').value.trim();
+
+                if (!nombre || !dni || !direccion || !cp || !email || !telefono) {
+                    showToast("Por favor, completá todos los campos obligatorios del formulario.");
+                    return;
+                }
+
+                const selectedDiskInput = document.querySelector('input[name="disk_upgrade"]:checked');
+                
+                let upgrades = [];
+                if (selectedDiskInput && selectedDiskInput.value !== 'none') {
+                    upgrades.push(selectedDiskInput.value === 'ssd_128' ? "SSD 128GB" : "SSD 256GB");
+                }
+
+                const upgradesText = upgrades.length > 0 ? ` con mejoras: [${upgrades.join(', ')}]` : '';
+                const totalCalculado = calculateCurrentTotal(product);
+
+                const message = `Hola Compuya, quiero iniciar la orden de compra de:\n- ${currentQuantity}x ${product.title}${upgradesText}\n\n*Datos de Despacho:*\n- Cliente: ${nombre}\n- DNI: ${dni}\n- Dirección: ${direccion} (CP: ${cp})\n- Email: ${email}\n- Teléfono: ${telefono}\n\n*Monto de Operación:*\n- Total (Efectivo/Transferencia): $${formatPrice(totalCalculado.offer)}`;
+                
+                openWhatsApp(message);
+            };
+        }
+
+        function closePurchaseModal() {
+            purchaseModal.classList.add('hidden');
+            purchaseModal.classList.remove('flex');
+        }
+
+        function openWhatsApp(message) {
+            const encoded = encodeURIComponent(message);
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encoded}`, '_blank');
+        }
+
+        function calculateCurrentTotal(product) {
+            let discCost = 0;
+
+            const diskSelected = document.querySelector('input[name="disk_upgrade"]:checked');
+            if (diskSelected && diskSelected.value !== 'none') {
+                discCost = diskSelected.value === 'ssd_128' ? UPGRADE_COSTS.SSD_128 : UPGRADE_COSTS.SSD_256;
+            }
+
+            const unitOffer = (product.basePrice * 0.9) + discCost;
+            return {
+                offer: unitOffer * currentQuantity
+            };
+        }
+
+        function handleQuantityChange(delta, productId) {
+            const qtyInput = document.getElementById('quantity-selector-val');
+            let newQty = parseInt(qtyInput.value) + delta;
+            if (newQty < 1) newQty = 1;
+            qtyInput.value = newQty;
+            currentQuantity = newQty;
+            
+            const product = products.find(p => p.id === productId);
+            if (product) calculateFinalPrice(product);
+        }
+
+        function syncQuantityInput(value, productId) {
+            let parsed = parseInt(value);
+            if (isNaN(parsed) || parsed < 1) parsed = 1;
+            currentQuantity = parsed;
+            
+            const product = products.find(p => p.id === productId);
+            if (product) calculateFinalPrice(product);
+        }
+
+        function renderCatalogView() {
+            mainHeader.classList.remove('hidden');
+            keyInfoSection.classList.remove('hidden');
+            catalogView.innerHTML = '';
+
+            products.forEach(product => {
+                const offerPrice = product.basePrice * 0.9;
+                const card = document.createElement('div');
+                card.className = 'product-card bg-slate-900 border border-slate-800 rounded-2xl p-5 hover:border-cyan-500/50 cursor-pointer flex flex-col justify-between shadow-xl';
+                card.setAttribute('onclick', `showProductDetail(${product.id})`);
+
+                const imageFallback = `https://placehold.co/400x400/0f172a/06b6d4?text=${product.title.replace(/ /g, '+')}`;
+
+                card.innerHTML = `
+                    <div>
+                        <div class="relative mb-4 overflow-hidden rounded-xl bg-slate-950 p-4 border border-slate-800/60">
+                            <img src="${product.imageUrl}" alt="${product.title}" class="w-full h-56 object-contain" onerror="this.onerror=null;this.src='${imageFallback}';">
+                            <div class="absolute top-2 left-2 bg-emerald-500 text-slate-950 text-xs px-2.5 py-1 rounded-lg font-black uppercase tracking-wider">
+                                💰 10% OFF
+                            </div>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-100 mb-2 leading-snug line-clamp-2">${product.title}</h3>
+                        
+                        <div class="mb-4">
+                            <div class="flex items-baseline gap-2 mb-0.5">
+                                <span class="text-2xl font-extrabold text-emerald-400">$${formatPrice(offerPrice)}</span>
+                                <span class="text-sm text-slate-500 line-through">$${formatPrice(product.basePrice)}</span>
+                            </div>
+                            <span class="text-xs text-slate-400 font-bold bg-slate-800 px-2 py-0.5 rounded border border-slate-700">Precio Especial Efectivo / Transf.</span>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2 mt-auto">
+                        <div class="text-xs text-teal-400 font-bold flex items-center gap-1">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                            Monitor 19" & Envío gratis
+                        </div>
+                        <button class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-3 px-4 rounded-xl transition duration-150 text-sm flex items-center justify-center gap-2 border border-slate-700" onclick="event.stopPropagation(); showProductDetail(${product.id})">
+                            Personalizar & Comprar
+                        </button>
+                    </div>
+                `;
+                catalogView.appendChild(card);
+            });
+            dynamicTitle.textContent = "🔥 Los Mejores Combos Calidad-Precio del Mercado 🔥";
+        }
+
+        function showCatalogView() {
+            detailView.classList.add('hidden');
+            catalogView.classList.remove('hidden');
+            dynamicTitle.classList.remove('hidden');
+            renderCatalogView();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function showProductDetail(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            currentQuantity = 1;
+            mainHeader.classList.add('hidden');
+            keyInfoSection.classList.add('hidden');
+            catalogView.classList.add('hidden');
+            dynamicTitle.classList.add('hidden');
+            detailView.classList.remove('hidden');
+
+            const isCustomizable = productId <= 4;
+            const initialDiskSpec = product.specs.find(s => s.name === "Disco")?.value || "500 GB HDD";
+
+            let customizationHTML = '';
+            if (isCustomizable) {
+                customizationHTML = `
+                    <div class="mt-8 pt-6 border-t border-slate-800 bg-slate-950/50 p-5 rounded-2xl border border-slate-800">
+                        <h4 class="text-xl font-extrabold text-cyan-400 mb-4 flex items-center gap-2">
+                            🛠️ Customizá tu Combo
+                        </h4>
+
+                        <div class="mb-5 p-4 bg-slate-900 rounded-xl border border-slate-800">
+                            <p class="font-bold text-slate-200 text-sm mb-3">Upgrade de Disco (Estándar: ${initialDiskSpec})</p>
+                            <div class="space-y-3">
+                                <label class="flex items-center cursor-pointer text-sm">
+                                    <input type="radio" name="disk_upgrade" value="none" checked onchange="calculateFinalPrice(products.find(p => p.id === ${productId}))" class="form-radio text-cyan-500 h-5 w-5 bg-slate-950 border-slate-800">
+                                    <span class="ml-3 text-slate-300">Mantener Disco Base (${initialDiskSpec})</span>
+                                </label>
+                                <label class="flex items-center cursor-pointer text-sm text-cyan-400 font-semibold">
+                                    <input type="radio" name="disk_upgrade" value="ssd_128" onchange="calculateFinalPrice(products.find(p => p.id === ${productId}))" class="form-radio text-cyan-500 h-5 w-5 bg-slate-950 border-slate-800">
+                                    <span class="ml-3">Sumar <strong class="text-slate-100">128 GB SSD</strong> (+${formatPrice(UPGRADE_COSTS.SSD_128)}) - ¡PC vuela!</span>
+                                </label>
+                                <label class="flex items-center cursor-pointer text-sm text-cyan-400 font-semibold">
+                                    <input type="radio" name="disk_upgrade" value="ssd_256" onchange="calculateFinalPrice(products.find(p => p.id === ${productId}))" class="form-radio text-cyan-500 h-5 w-5 bg-slate-950 border-slate-800">
+                                    <span class="ml-3">Sumar <strong class="text-slate-100">256 GB SSD</strong> (+${formatPrice(UPGRADE_COSTS.SSD_256)}) - Fluidez Total</span>
+                                </label>
+                            </div>
+                            <p class="text-[11px] text-slate-500 mt-2">* Al agregar un SSD, se actualiza a <strong>Windows 11</strong> (excepto Core2Duo).</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            const detailFallback = `https://placehold.co/800x400/0f172a/06b6d4?text=${product.title.replace(/ /g, '+')}`;
+
+            productDetailContent.innerHTML = `
+                <div class="lg:w-2/5 mb-8 lg:mb-0">
+                    <div class="sticky top-4">
+                        <div class="relative mb-4 bg-slate-950 border border-slate-800 p-6 rounded-2xl flex items-center justify-center">
+                            <img src="${product.imageUrl}" alt="${product.title}" class="w-full h-auto max-h-96 object-contain" onerror="this.onerror=null;this.src='${detailFallback}';">
+                            <div class="absolute top-3 left-3 bg-emerald-500 text-slate-950 text-xs font-black px-3 py-1 rounded-lg uppercase tracking-wider">Monitor 19" Incluido</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:w-3/5 lg:pl-4">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="text-xs text-emerald-400 font-bold uppercase tracking-widest">En Stock para Envío Gratis</span>
+                    </div>
+
+                    <h1 class="text-3xl md:text-4xl font-extrabold text-slate-100 mb-4 tracking-tight">${product.title}</h1>
+
+                    <div class="mb-6 p-5 bg-gradient-to-br from-slate-950 to-slate-900 border border-slate-800 rounded-2xl shadow-xl">
+                        <div class="flex flex-col">
+                            <span class="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-1">Precio Final (Efectivo o Transferencia):</span>
+                            <div class="flex items-baseline gap-3">
+                                <span class="text-4xl md:text-5xl font-black text-emerald-400">$<span id="final_offer_price"></span></span>
+                                <span class="text-lg text-slate-500 line-through">$<span id="final_list_price"></span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-6 flex items-center gap-4 bg-slate-950 p-4 rounded-xl border border-slate-800 w-fit">
+                        <label class="text-sm font-bold text-slate-300">Cantidad:</label>
+                        <div class="flex items-center border border-slate-800 bg-slate-900 rounded-lg overflow-hidden">
+                            <button onclick="handleQuantityChange(-1, ${product.id})" class="px-3.5 py-1.5 text-slate-300 hover:bg-slate-800 font-extrabold transition">-</button>
+                            <input type="number" id="quantity-selector-val" value="1" min="1" onchange="syncQuantityInput(this.value, ${product.id})" class="bg-transparent w-12 text-center text-slate-100 font-bold focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                            <button onclick="handleQuantityChange(1, ${product.id})" class="px-3.5 py-1.5 text-slate-300 hover:bg-slate-800 font-extrabold transition">+</button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
+                        <button onclick="openPurchaseModal(products.find(p => p.id === ${product.id}))" class="w-full bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600 text-slate-950 text-base md:text-lg font-black py-4 px-6 rounded-xl shadow-lg transition duration-200 flex items-center justify-center gap-2">
+                            Comprar Ahora
+                        </button>
+                        <button class="wa-button-detail w-full bg-slate-800 hover:bg-slate-700 text-slate-100 text-base md:text-lg font-bold py-4 px-6 rounded-xl border border-slate-700 transition duration-200 flex items-center justify-center gap-2">
+                            Consultas por WhatsApp
+                        </button>
+                    </div>
+
+                    <div class="bg-slate-950/30 border border-slate-800 p-5 rounded-2xl mb-8 space-y-3 text-sm">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-cyan-500/10 rounded-full flex items-center justify-center text-cyan-400 font-bold">✓</div>
+                            <p class="text-slate-300">Envío & Configuración Express Incluida</p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-emerald-500/10 rounded-full flex items-center justify-center text-emerald-400 font-bold">🛡️</div>
+                            <p class="text-slate-300">Garantía por Escrito de 3 Meses</p>
+                        </div>
+                    </div>
+
+                    ${customizationHTML}
+
+                    <div class="mt-8 border-t border-slate-800 pt-6">
+                        <h3 class="text-xl font-bold text-slate-200 mb-3">Descripción</h3>
+                        <p class="text-slate-400 leading-relaxed mb-4 text-sm">${product.description}</p>
+                    </div>
+
+                    <div class="border-t border-slate-800 pt-6 mt-6">
+                        <h3 class="text-xl font-bold text-slate-200 mb-4">Especificaciones Técnicas</h3>
+                        <ul id="product-detail-specs" class="space-y-2"></ul>
+                    </div>
+                </div>
+            `;
+
+            calculateFinalPrice(product);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function calculateFinalPrice(product) {
+            const detailDiv = document.getElementById('detail-view');
+            if (!detailDiv) return;
+
+            let discCost = 0;
+            let diskSpec = product.specs.find(s => s.name === "Disco")?.value || "500 GB HDD";
+            let upgradesDescription = [];
+
+            const diskSelected = detailDiv.querySelector('input[name="disk_upgrade"]:checked');
+            if (diskSelected && diskSelected.value !== 'none') {
+                if (diskSelected.value === 'ssd_128') {
+                    discCost = UPGRADE_COSTS.SSD_128;
+                    diskSpec = "128 GB SSD Ultra-rápido";
+                    upgradesDescription.push("Upgrade SSD 128GB");
+                } else {
+                    discCost = UPGRADE_COSTS.SSD_256;
+                    diskSpec = "256 GB SSD Ultra-rápido";
+                    upgradesDescription.push("Upgrade SSD 256GB");
+                }
+            }
+
+            const totalBase = (product.basePrice + discCost) * currentQuantity;
+            const totalOffer = (totalBase * 0.9);
+
+            detailDiv.querySelector('#final_offer_price').textContent = formatPrice(totalOffer);
+            detailDiv.querySelector('#final_list_price').textContent = formatPrice(totalBase);
+
+            updateSpecsTable(product, diskSpec);
+
+            const waButton = detailDiv.querySelector('.wa-button-detail');
+            const modText = upgradesDescription.length > 0 ? ` (+${upgradesDescription.join(', ')})` : '';
+            const msg = `Hola Compuya, quiero info del combo: ${currentQuantity}x ${product.title}${modText}. Pago en efectivo/transferencia: $${formatPrice(totalOffer)}.`;
+            if (waButton) waButton.setAttribute('onclick', `openWhatsApp('${msg}')`);
+        }
+
+        function updateSpecsTable(product, diskSpec) {
+            const specsListElement = document.getElementById('product-detail-specs');
+            if (!specsListElement) return;
+
+            const updatedSpecs = product.specs.map(s => {
+                if (s.name === "Disco") return { ...s, value: diskSpec };
+                return s;
+            });
+
+            specsListElement.innerHTML = updatedSpecs.map(spec => `
+                <li class="flex justify-between p-3 bg-slate-900 rounded-lg border border-slate-800 text-sm">
+                    <span class="text-slate-500 font-bold">${spec.name}:</span>
+                    <span class="text-slate-200">${spec.value}</span>
+                </li>
+            `).join('');
+        }
+
+        window.onload = () => {
+            renderCatalogView();
+            openWarrantyModalBtn.onclick = openWarrantyModal;
+            warrantyModal.onclick = (e) => { if (e.target === warrantyModal) closeWarrantyModal(); };
+            purchaseModal.onclick = (e) => { if (e.target === purchaseModal) closePurchaseModal(); };
+        };
+
+        window.showProductDetail = showProductDetail;
+        window.showCatalogView = showCatalogView;
+        window.openWhatsApp = openWhatsApp;
+        window.closeWarrantyModal = closeWarrantyModal;
+        window.openWarrantyModal = openWarrantyModal;
+        window.calculateFinalPrice = calculateFinalPrice;
+        window.handleQuantityChange = handleQuantityChange;
+        window.syncQuantityInput = syncQuantityInput;
+    </script>
+</body>
+</html>
